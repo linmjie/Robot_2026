@@ -3,7 +3,7 @@ from vex import *
 import urandom
 import math
 
-# Brain should be defined by default
+# Brain should be defined by defaulthello
 brain=Brain()
 
 # Robot configuration code
