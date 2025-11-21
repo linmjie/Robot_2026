@@ -96,13 +96,13 @@ def autonomous():
 
     drivetrain.set_turn_velocity(100,PERCENT)
 
-    drivetrain.drive_for(REVERSE, 6, INCHES)
+    drivetrain.drive_for(REVERSE, 26, INCHES)
 
     
 
     drivetrain.turn_for(RIGHT, 90, DEGREES)
 
-    drivetrain.drive_for(REVERSE,9, INCHES)
+    drivetrain.drive_for(REVERSE,29, INCHES)
 
     drivetrain.turn_for(RIGHT, 90, DEGREES)
 
