@@ -156,6 +156,7 @@ int main() {
   // Begin project code
 
   numSet(0);
+  std::cout << "Hey" << "\n";
   controller1.ButtonUp.pressed(increment);
   controller1.ButtonDown.pressed(decrement);
 
