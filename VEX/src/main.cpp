@@ -31,6 +31,9 @@ controller controller1;
 
 
 // Robot configuration code.
+motor MotorGroup1MotorA = motor(PORT1, ratio18_1, true);
+motor MotorGroup1MotorB = motor(PORT3, ratio18_1, true);
+motor_group MotorGroup1 = motor_group(MotorGroup1MotorA, MotorGroup1MotorB);
 
 
 
@@ -101,17 +104,17 @@ double mean(std::vector<T> vect){
 
 template <typename T>
 double stddev(std::vector<T> vect){
-  double mean = mean(vect);
+  double men = mean(vect);
   double devSum = 0;
   for (int i = 0; i < vect.size(); i++){
-    devSum += pow(vect[i] - mean, 2);
+    devSum += pow(vect[i] - men, 2);
   }
   return pow(devSum/vect.size(), 0.5);
 }
 
 //Listener Helper Functions
 void brainPrint(std::string string){ //Print new line after
-  Brain.Screen.print(string);
+  Brain.Screen.print("%s", string.c_str());
   Brain.Screen.newLine();
 }
 
@@ -147,6 +150,11 @@ void findMean(){
 void findStddev(){
   brainPrint("Standard Deviation: " + toString(stddev(list)));
 }
+
+void spinThing(){
+  MotorGroup1.setVelocity(100, percent);
+  MotorGroup1.spinFor(1, seconds);
+}
 //End Listener Functions
 
 
@@ -164,4 +172,10 @@ int main() {
   controller1.ButtonA.pressed(removeListItem);
   controller1.ButtonX.pressed(findMean);
   controller1.ButtonY.pressed(findStddev);
+  while (true){
+    MotorGroup1.setVelocity(100, percent);
+    if (controller1.ButtonL1.pressing()){
+      MotorGroup1.spin(forward);
+    }
+  }
 }
