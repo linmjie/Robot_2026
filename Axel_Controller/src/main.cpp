@@ -4,9 +4,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
-#include <string.h>
 
-
+#include "logger.h"
 #include "vex.h"
 
 using namespace vex;
@@ -14,6 +13,9 @@ using namespace vex;
 // Brain should be defined by default
 brain Brain;
 //GLOBAL VARS
+auto LOGGER = Logger::create(&Brain.Screen)
+    .disableWordWrap()
+    .build();
 const double SMALL_INCREASE = 0.05;
 //idk if these are the correct left and right
 double LEFT_MOTOR_RATIO = 1.0;
@@ -183,7 +185,6 @@ task rc_auto_loop_task_Controller1(rc_auto_loop_function_Controller1);
 #include "vex.h"
   
 // Allows for easier use of the VEX Library
-using namespace vex;
 
 void clampAndLog() {
   if (LEFT_MOTOR_RATIO > 1.0) {
@@ -197,7 +198,9 @@ void clampAndLog() {
   } else if (RIGHT_MOTOR_RATIO < 0) {
     RIGHT_MOTOR_RATIO = 0.01;
   }
-  //add logging
+  LOGGER.clearScreen();
+  LOGGER.println("Left Motor Ratio: %.2f", LEFT_MOTOR_RATIO);
+  LOGGER.println("Right Motor Ratio: %.2f", RIGHT_MOTOR_RATIO);
 }
 
 void decreaseLeft() {
