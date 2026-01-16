@@ -126,14 +126,16 @@ int rc_auto_loop_function_Controller1()
             if (DrivetrainLNeedsToBeStopped_Controller1)
             {
                 LeftDriveSmart.setVelocity(drivetrainLeftSideSpeed, percent);
-                LeftDriveSmart.spin(forward);
+                LeftDriveSmart.spin(reverse);
             }
             // only tell the right drive motor to spin if the values are not in the deadband range
             if (DrivetrainRNeedsToBeStopped_Controller1)
             {
                 RightDriveSmart.setVelocity(drivetrainRightSideSpeed, percent);
-                RightDriveSmart.spin(forward);
+                RightDriveSmart.spin(reverse);
             }
+
+            
             // check the ButtonL1/ButtonL2 status to control Arm_Motor
             if (Controller1.ButtonL1.pressing())
             {
@@ -204,3 +206,4 @@ int main()
     Drivetrain.setDriveVelocity(90, percent);
     Intake_motor.setVelocity(90, percent);
 }
+
