@@ -1,7 +1,3 @@
-#pragma region VEXcode Generated Robot Configuration
-// Make sure all required headers are included.
-
-//logger.h automatically includes vex.h
 #include "logger.h"
 
 using namespace vex;
@@ -18,6 +14,7 @@ const double SMALL_INCREASE = 0.05;
 double LEFT_MOTOR_RATIO = 1.0;
 double RIGHT_MOTOR_RATIO = 1.0;
 
+#pragma region VEXcode Generated Robot Configuration
 // START V5 MACROS
 #define waitUntil(condition) \
     do                       \
@@ -76,7 +73,7 @@ bool Controller1RightShoulderControlMotorsStopped = true;
 bool DrivetrainLNeedsToBeStopped_Controller1 = true;
 bool DrivetrainRNeedsToBeStopped_Controller1 = true;
 
-// define a task that will handle monitoring inputs from Controller1
+//ACTUAL CODE STUFF FOR CONTROLLER1
 int rc_auto_loop_function_Controller1()
 {
     // process the controller input every 20 milliseconds
@@ -92,6 +89,7 @@ int rc_auto_loop_function_Controller1()
             int drivetrainLeftSideSpeed = Controller1.Axis3.position() + Controller1.Axis1.position();
             int drivetrainRightSideSpeed = Controller1.Axis3.position() - Controller1.Axis1.position();
 
+            //These two are just for multipliers to test speeds
             drivetrainLeftSideSpeed *= LEFT_MOTOR_RATIO;
             drivetrainRightSideSpeed *= RIGHT_MOTOR_RATIO;
 
@@ -183,6 +181,7 @@ int rc_auto_loop_function_Controller1()
     return 0;
 }
 
+//(assuming) async code for controller1 function that runs in background
 task rc_auto_loop_task_Controller1(rc_auto_loop_function_Controller1);
 
 #pragma endregion VEXcode Generated Robot Configuration
@@ -195,6 +194,7 @@ task rc_auto_loop_task_Controller1(rc_auto_loop_function_Controller1);
 /*    Description:  V5 project                                                */
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
+#pragma region motor speed adjustment
 
 void clampAndLog() {
   if (LEFT_MOTOR_RATIO > 1.0) {
@@ -229,14 +229,14 @@ void increaseRight() {
   RIGHT_MOTOR_RATIO += SMALL_INCREASE;
   clampAndLog();
 }
+#pragma endregion motor speed adjustment
 
-int main()
-{
+int main() {
     // Initializing Robot Configuration. DO NOT REMOVE!
     vexcodeInit();
     // Begin project code
-    Controller1.ButtonY.pressed(decreaseLeft);
     Controller1.ButtonA.pressed(increaseLeft);
+    Controller1.ButtonY.pressed(decreaseLeft);
 
     Controller1.ButtonX.pressed(increaseRight);
     Controller1.ButtonB.pressed(decreaseRight);
