@@ -1,8 +1,12 @@
 #pragma region VEXcode Generated Robot Configuration
 // Make sure all required headers are included.
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <math.h>
 
-//logger.h automatically includes vex.h
 #include "logger.h"
+#include "vex.h"
 
 using namespace vex;
 
@@ -143,12 +147,12 @@ int rc_auto_loop_function_Controller1()
                 RightDriveSmart.spin(reverse);
             }
             // check the ButtonL1/ButtonL2 status to control Arm_Motor
-            if (Controller1.ButtonL1.pressing()) //FROM L1
+            if (Controller1.ButtonL1.pressing())
             {
                 Arm_Motor.spin(forward);
                 Controller1LeftShoulderControlMotorsStopped = false;
             }
-            else if (Controller1.ButtonR1.pressing()) //FROM L2
+            else if (Controller1.ButtonL2.pressing())
             {
                 Arm_Motor.spin(reverse);
                 Controller1LeftShoulderControlMotorsStopped = false;
@@ -160,12 +164,12 @@ int rc_auto_loop_function_Controller1()
                 Controller1LeftShoulderControlMotorsStopped = true;
             }
             // check the ButtonR1/ButtonR2 status to control Intake_motor
-            if (Controller1.ButtonR2.pressing()) //FROM R1
+            if (Controller1.ButtonR1.pressing())
             {
                 Intake_motor.spin(forward);
                 Controller1RightShoulderControlMotorsStopped = false;
             }
-            else if (Controller1.ButtonL2.pressing()) //FROM R2
+            else if (Controller1.ButtonR2.pressing())
             {
                 Intake_motor.spin(reverse);
                 Controller1RightShoulderControlMotorsStopped = false;
@@ -195,6 +199,12 @@ task rc_auto_loop_task_Controller1(rc_auto_loop_function_Controller1);
 /*    Description:  V5 project                                                */
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
+
+// Include the V5 Library
+#include "vex.h"
+
+// Allows for easier use of the VEX Library
+using namespace vex;
 
 void clampAndLog() {
   if (LEFT_MOTOR_RATIO > 1.0) {
