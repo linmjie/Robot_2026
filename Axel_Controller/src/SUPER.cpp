@@ -568,7 +568,17 @@ void increaseRight() {
   clampAndLog();
 }
 #pragma endregion motor speed adjustment
+void autonomous(){
 
+  Arm_Motor.setVelocity(80, percent);
+  Drivetrain.setDriveVelocity(80, percent);
+  Intake_motor.setVelocity(80, percent);
+  Drivetrain.driveFor(reverse, 1200, mm);
+  Drivetrain.turnFor(right, 90, degrees);
+ 
+
+
+}
 int main() {
     // Initializing Robot Configuration. DO NOT REMOVE!
     vexcodeInit();
@@ -582,4 +592,5 @@ int main() {
     Arm_Motor.setVelocity(90, percent);
     Drivetrain.setDriveVelocity(90, percent);
     Intake_motor.setVelocity(90, percent);
+    autonomous();
 }
