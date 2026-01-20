@@ -71,8 +71,6 @@ bool Controller1RightShoulderControlMotorsStopped = true;
 bool DrivetrainLNeedsToBeStopped_Controller1 = true;
 bool DrivetrainRNeedsToBeStopped_Controller1 = true;
 
-// define a task that will handle monitoring inputs from Controller1
-int rc_auto_loop_function_Controller1()
 {
     // process the controller input every 20 milliseconds
     // update the motors based on the input values
@@ -80,7 +78,6 @@ int rc_auto_loop_function_Controller1()
     {
         if (RemoteControlCodeEnabled)
         {
-
             // calculate the drivetrain motor velocities from the controller joystick axies
             // left = Axis3 + Axis1
             // right = Axis3 - Axis1
@@ -134,15 +131,13 @@ int rc_auto_loop_function_Controller1()
                 RightDriveSmart.setVelocity(drivetrainRightSideSpeed, percent);
                 RightDriveSmart.spin(reverse);
             }
-
-            
             // check the ButtonL1/ButtonL2 status to control Arm_Motor
-            if (Controller1.ButtonL1.pressing())
+            if (Controller1.ButtonL1.pressing()) //FROM L1
             {
                 Arm_Motor.spin(forward);
                 Controller1LeftShoulderControlMotorsStopped = false;
             }
-            else if (Controller1.ButtonL2.pressing())
+            else if (Controller1.ButtonR1.pressing()) //FROM L2
             {
                 Arm_Motor.spin(reverse);
                 Controller1LeftShoulderControlMotorsStopped = false;
@@ -154,12 +149,12 @@ int rc_auto_loop_function_Controller1()
                 Controller1LeftShoulderControlMotorsStopped = true;
             }
             // check the ButtonR1/ButtonR2 status to control Intake_motor
-            if (Controller1.ButtonR1.pressing())
+            if (Controller1.ButtonR2.pressing()) //FROM R1
             {
                 Intake_motor.spin(forward);
                 Controller1RightShoulderControlMotorsStopped = false;
             }
-            else if (Controller1.ButtonR2.pressing())
+            else if (Controller1.ButtonL2.pressing()) //FROM R2
             {
                 Intake_motor.spin(reverse);
                 Controller1RightShoulderControlMotorsStopped = false;
@@ -206,4 +201,5 @@ int main()
     Drivetrain.setDriveVelocity(90, percent);
     Intake_motor.setVelocity(90, percent);
 }
+
 
