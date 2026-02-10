@@ -16,7 +16,8 @@ controller Controller1 = controller(primary);
 
 //Main.. stuff
 //There's two pneumatics, don't know if this is right, there is a @class vex::pneumatics 
-cte::pneumatic pneumatic = cte::pneumatic(PORT1, true);
+cte::pneumatic pneumatic = cte::pneumatic(Brain.ThreeWirePort.A, true);
+digital_in digIn = digital_in(Brain.ThreeWirePort.A);
 
 #pragma region VEXcode Generated Robot Configuration
 // generating and setting random seed
