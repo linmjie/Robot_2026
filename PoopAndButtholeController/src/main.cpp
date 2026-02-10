@@ -57,8 +57,10 @@ int main() {
     Brain.Screen.printAt( 10, 50, "Hello V5" );
    
     while(1) {
-        
         // Allow other tasks to run
-        this_thread::sleep_for(10);
+        pneumatic.open();
+        this_thread::sleep_for(3000);
+        pneumatic.close();
+        this_thread::sleep_for(3000);
     }
 }
