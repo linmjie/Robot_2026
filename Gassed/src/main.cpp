@@ -286,6 +286,7 @@ int main() {
     });
 
     Top_Outake.setVelocity(90, percent);
+    Middle_Outake.setVelocity(90, percent);
     Drivetrain.setDriveVelocity(90, percent);
     Intake_motor.setVelocity(90, percent);
 }
