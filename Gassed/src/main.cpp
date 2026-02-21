@@ -30,13 +30,22 @@ double RIGHT_MOTOR_RATIO = 1.0;
 // END V5 MACROS
 
 // Pneumatic stuff
-pneumatics pneumatic = pneumatics(Brain.ThreeWirePort.A);
-bool isOpen = false;
+pneumatics pneumaticA = pneumatics(Brain.ThreeWirePort.A);
+bool A_isOpen = false;
 
-void togglePneumaticState() {
-    isOpen = !isOpen;
-    if (isOpen) pneumatic.open();
-    else pneumatic.close();
+pneumatics pneumaticB = pneumatics(Brain.ThreeWirePort.A);
+bool B_isOpen = false;
+
+void toggle_A_PneumaticState() {
+    A_isOpen = !A_isOpen;
+    if (A_isOpen) pneumaticA.open();
+    else pneumaticA.close();
+}
+
+void toggle_B_PneumaticState() {
+    B_isOpen = !B_isOpen;
+    if (B_isOpen) pneumaticB.open();
+    else pneumaticB.close();
 }
 
 // Robot configuration code.
@@ -240,14 +249,15 @@ int main() {
 
     //Unlike the motors which activate on held controller input, pneumatic is toggleable
 
-    Controller1.ButtonUp.pressed(togglePneumaticState);
+    Controller1.ButtonUp.pressed(toggle_A_PneumaticState);
 
-    Controller1.ButtonLeft.pressed([]{ pneumatic.close(); });
-    Controller1.ButtonRight.pressed([]{ pneumatic.open(); });
+    Controller1.ButtonLeft.pressed([]{ pneumaticA.close(); });
+    Controller1.ButtonRight.pressed([]{ pneumaticA.open(); });
 
-    Controller1.ButtonDown.pressed([]{
-        LOGGER.println("pneumatic value thing: %d", pneumatic.value());
-    });
+    Controller1.ButtonDown.pressed(toggle_B_PneumaticState);
+
+    Controller1.ButtonY.pressed([]{ pneumaticB.close(); });
+    Controller1.ButtonX.pressed([]{ pneumaticB.open(); });
 
     Top_Outake.setVelocity(90, percent);
     Middle_Outake.setVelocity(90, percent);
