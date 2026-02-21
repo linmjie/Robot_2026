@@ -1,5 +1,5 @@
 #pragma region VEXcode critical init stuff
-#include "logger.h"
+#include "vex.h"
 
 using namespace vex;
 
@@ -7,9 +7,6 @@ using namespace vex;
 brain Brain;
 
 //GLOBAL VARS
-auto LOGGER = Logger::create(&Brain.Screen)
-    .disableWordWrap()
-    .build();
 const double SMALL_INCREASE = 0.05;
 //idk if these are the correct left and right
 double LEFT_MOTOR_RATIO = 1.0;
@@ -49,17 +46,17 @@ void toggle_B_PneumaticState() {
 }
 
 // Robot configuration code.
-motor leftMotorA = motor(PORT2, ratio6_1, false);
-motor leftMotorB = motor(PORT3, ratio6_1, false);
+motor leftMotorA = motor(PORT2, ratio18_1, false);
+motor leftMotorB = motor(PORT3, ratio18_1, false);
 motor_group LeftDriveSmart = motor_group(leftMotorA, leftMotorB);
-motor rightMotorA = motor(PORT1, ratio6_1, true);
-motor rightMotorB = motor(PORT4, ratio6_1, true);
+motor rightMotorA = motor(PORT1, ratio18_1, true);
+motor rightMotorB = motor(PORT4, ratio18_1, true);
 motor_group RightDriveSmart = motor_group(rightMotorA, rightMotorB);
 drivetrain Drivetrain = drivetrain(LeftDriveSmart, RightDriveSmart, 319.19, 295, 40, mm, 1);
 
 controller Controller1 = controller(primary);
-motor Middle_Outake = motor(PORT8, ratio18_1, false);
-motor Top_Outake = motor(PORT7, ratio18_1, false);
+motor Middle_Outake = motor(PORT8, ratio6_1, false);
+motor Top_Outake = motor(PORT7, ratio6_1, false);
 
 motor Intake_motor = motor(PORT6, ratio18_1, false);
 
@@ -242,18 +239,41 @@ task rc_auto_loop_task_Controller1(rc_auto_loop_function_Controller1);
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 
-void autonomous(){
+void autonomous() {
   Drivetrain.setDriveVelocity(90, percent);
-  Drivetrain.driveFor(reverse, 1200, mm);
+  Intake_motor.spin(forward);
+  wait(0.5, seconds);
+
+  Drivetrain.driveFor(reverse, 6, inches, true);
+  Drivetrain.turnFor(left, 90, degrees);
+  wait(1, seconds);
+  Drivetrain.driveFor(reverse, 6, inches, true);
+  wait(1, seconds);
   Drivetrain.turnFor(right, 90, degrees);
+  wait(1, seconds);
+  Drivetrain.driveFor(reverse, 36, inches, true);
+  wait(1, seconds);
+  
+  Drivetrain.setDriveVelocity(65, percent);
+  Drivetrain.driveFor(reverse, 30, inches);
+  wait(2, seconds);
+
+  //Reset
+  Intake_motor.stop();
+  //Start the pneumatic open because mason keeps outaking into the air...
+  toggle_B_PneumaticState();
+  Drivetrain.stop(brake);
+  Drivetrain.setDriveVelocity(100, percent);
 }
 
 int main() {
     // Initializing Robot Configuration. DO NOT REMOVE!
     vexcodeInit();
     // Begin project code
+    competition comp;
 
     //Unlike the motors which activate on held controller input, pneumatic is toggleable
+    //Absolute close/open on pneumatics may be removed later because they're not used often
 
     Controller1.ButtonUp.pressed(toggle_A_PneumaticState);
 
@@ -270,5 +290,5 @@ int main() {
     Drivetrain.setDriveVelocity(90, percent);
     Intake_motor.setVelocity(90, percent);
 
-    //autonomous();
+    comp.autonomous(autonomous);
 }
