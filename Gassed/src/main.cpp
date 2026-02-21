@@ -49,11 +49,11 @@ void toggle_B_PneumaticState() {
 }
 
 // Robot configuration code.
-motor leftMotorA = motor(PORT2, ratio18_1, false);
-motor leftMotorB = motor(PORT3, ratio18_1, false);
+motor leftMotorA = motor(PORT2, ratio6_1, false);
+motor leftMotorB = motor(PORT3, ratio6_1, false);
 motor_group LeftDriveSmart = motor_group(leftMotorA, leftMotorB);
-motor rightMotorA = motor(PORT1, ratio18_1, true);
-motor rightMotorB = motor(PORT4, ratio18_1, true);
+motor rightMotorA = motor(PORT1, ratio6_1, true);
+motor rightMotorB = motor(PORT4, ratio6_1, true);
 motor_group RightDriveSmart = motor_group(rightMotorA, rightMotorB);
 drivetrain Drivetrain = drivetrain(LeftDriveSmart, RightDriveSmart, 319.19, 295, 40, mm, 1);
 
@@ -242,6 +242,12 @@ task rc_auto_loop_task_Controller1(rc_auto_loop_function_Controller1);
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 
+void autonomous(){
+  Drivetrain.setDriveVelocity(90, percent);
+  Drivetrain.driveFor(reverse, 1200, mm);
+  Drivetrain.turnFor(right, 90, degrees);
+}
+
 int main() {
     // Initializing Robot Configuration. DO NOT REMOVE!
     vexcodeInit();
@@ -263,4 +269,6 @@ int main() {
     Middle_Outake.setVelocity(90, percent);
     Drivetrain.setDriveVelocity(90, percent);
     Intake_motor.setVelocity(90, percent);
+
+    //autonomous();
 }
