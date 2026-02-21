@@ -33,7 +33,7 @@ double RIGHT_MOTOR_RATIO = 1.0;
 pneumatics pneumaticA = pneumatics(Brain.ThreeWirePort.A);
 bool A_isOpen = false;
 
-pneumatics pneumaticB = pneumatics(Brain.ThreeWirePort.A);
+pneumatics pneumaticB = pneumatics(Brain.ThreeWirePort.B);
 bool B_isOpen = false;
 
 void toggle_A_PneumaticState() {
