@@ -1,3 +1,4 @@
+#pragma region VEXcode critical init stuff
 #include "logger.h"
 
 using namespace vex;
@@ -13,6 +14,8 @@ const double SMALL_INCREASE = 0.05;
 //idk if these are the correct left and right
 double LEFT_MOTOR_RATIO = 1.0;
 double RIGHT_MOTOR_RATIO = 1.0;
+
+#pragma endregion VEXcode critical init stuff
 
 #pragma region VEXcode Generated Robot Configuration
 // START V5 MACROS
@@ -229,52 +232,13 @@ task rc_auto_loop_task_Controller1(rc_auto_loop_function_Controller1);
 /*    Description:  V5 project                                                */
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
-#pragma region motor speed adjustment
-
-void clampAndLog() {
-  if (LEFT_MOTOR_RATIO > 1.0) {
-    LEFT_MOTOR_RATIO = 1.0;
-  } else if (LEFT_MOTOR_RATIO < 0) {
-    LEFT_MOTOR_RATIO = 0.01;
-  }
-
-  if (RIGHT_MOTOR_RATIO > 1.0) {
-    RIGHT_MOTOR_RATIO = 1.0;
-  } else if (RIGHT_MOTOR_RATIO < 0) {
-    RIGHT_MOTOR_RATIO = 0.01;
-  }
-  LOGGER.println("Left Motor Ratio: %.2f", LEFT_MOTOR_RATIO);
-  LOGGER.println("Right Motor Ratio: %.2f", RIGHT_MOTOR_RATIO);
-  LOGGER.println("=======================");
-}
-
-void decreaseLeft() {
-  LEFT_MOTOR_RATIO -= SMALL_INCREASE;
-  clampAndLog();
-}
-void increaseLeft() {
-  LEFT_MOTOR_RATIO += SMALL_INCREASE;
-  clampAndLog();
-}
-void decreaseRight() {
-  RIGHT_MOTOR_RATIO -= SMALL_INCREASE;
-  clampAndLog();
-}
-void increaseRight() {
-  RIGHT_MOTOR_RATIO += SMALL_INCREASE;
-  clampAndLog();
-}
-#pragma endregion motor speed adjustment
 
 int main() {
     // Initializing Robot Configuration. DO NOT REMOVE!
     vexcodeInit();
     // Begin project code
-    // Controller1.ButtonA.pressed(increaseLeft);
-    // Controller1.ButtonY.pressed(decreaseLeft);
 
-    // Controller1.ButtonX.pressed(increaseRight);
-    // Controller1.ButtonB.pressed(decreaseRight);
+    //Unlike the motors which activate on held controller input, pneumatic is toggleable
 
     Controller1.ButtonUp.pressed(togglePneumaticState);
 
