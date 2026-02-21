@@ -37,18 +37,19 @@ void togglePneumaticState() {
 }
 
 // Robot configuration code.
-motor leftMotorA = motor(PORT1, ratio18_1, false);
-motor leftMotorB = motor(PORT2, ratio18_1, false);
+motor leftMotorA = motor(PORT2, ratio18_1, false);
+motor leftMotorB = motor(PORT3, ratio18_1, false);
 motor_group LeftDriveSmart = motor_group(leftMotorA, leftMotorB);
-motor rightMotorA = motor(PORT3, ratio18_1, true);
+motor rightMotorA = motor(PORT1, ratio18_1, true);
 motor rightMotorB = motor(PORT4, ratio18_1, true);
 motor_group RightDriveSmart = motor_group(rightMotorA, rightMotorB);
 drivetrain Drivetrain = drivetrain(LeftDriveSmart, RightDriveSmart, 319.19, 295, 40, mm, 1);
 
 controller Controller1 = controller(primary);
-motor Arm_Motor = motor(PORT3, ratio18_1, false);
+motor Middle_Outake = motor(PORT8, ratio18_1, false);
+motor Top_Outake = motor(PORT7, ratio18_1, false);
 
-motor Intake_motor = motor(PORT4, ratio18_1, false);
+motor Intake_motor = motor(PORT6, ratio18_1, false);
 
 // generating and setting random seed
 void initializeRandomSeed()
@@ -84,6 +85,8 @@ bool RemoteControlCodeEnabled = true;
 // define variables used for controlling motors based on controller inputs
 bool Controller1LeftShoulderControlMotorsStopped = true;
 bool Controller1RightShoulderControlMotorsStopped = true;
+bool middleIntakeControlMotorsStopped = true;
+
 bool DrivetrainLNeedsToBeStopped_Controller1 = true;
 bool DrivetrainRNeedsToBeStopped_Controller1 = true;
 
@@ -157,17 +160,17 @@ int rc_auto_loop_function_Controller1()
             // check the ButtonL1/ButtonL2 status to control Arm_Motor
             if (Controller1.ButtonL1.pressing()) //FROM L1
             {
-                Arm_Motor.spin(forward);
+                Top_Outake.spin(forward);
                 Controller1LeftShoulderControlMotorsStopped = false;
             }
             else if (Controller1.ButtonR1.pressing()) //FROM L2
             {
-                Arm_Motor.spin(reverse);
+                Top_Outake.spin(reverse);
                 Controller1LeftShoulderControlMotorsStopped = false;
             }
             else if (!Controller1LeftShoulderControlMotorsStopped)
             {
-                Arm_Motor.stop();
+                Top_Outake.stop();
                 // set the toggle so that we don't constantly tell the motor to stop when the buttons are released
                 Controller1LeftShoulderControlMotorsStopped = true;
             }
@@ -187,6 +190,24 @@ int rc_auto_loop_function_Controller1()
                 Intake_motor.stop();
                 // set the toggle so that we don't constantly tell the motor to stop when the buttons are released
                 Controller1RightShoulderControlMotorsStopped = true;
+            }
+
+            //Basically copied the previous section with the other motor
+            if (Controller1.ButtonA.pressing()) //FROM A
+            {
+                Middle_Outake.spin(forward);
+                middleIntakeControlMotorsStopped = false;
+            }
+            else if (Controller1.ButtonB.pressing()) //FROM B
+            {
+                Middle_Outake.spin(reverse);
+                middleIntakeControlMotorsStopped = false;
+            }
+            else if (!middleIntakeControlMotorsStopped)
+            {
+                Middle_Outake.stop();
+                // set the toggle so that we don't constantly tell the motor to stop when the buttons are released
+                middleIntakeControlMotorsStopped = true;
             }
         }
         // wait before repeating the process
@@ -249,19 +270,22 @@ int main() {
     // Initializing Robot Configuration. DO NOT REMOVE!
     vexcodeInit();
     // Begin project code
-    Controller1.ButtonA.pressed(increaseLeft);
-    Controller1.ButtonY.pressed(decreaseLeft);
+    // Controller1.ButtonA.pressed(increaseLeft);
+    // Controller1.ButtonY.pressed(decreaseLeft);
 
-    Controller1.ButtonX.pressed(increaseRight);
-    Controller1.ButtonB.pressed(decreaseRight);
+    // Controller1.ButtonX.pressed(increaseRight);
+    // Controller1.ButtonB.pressed(decreaseRight);
 
     Controller1.ButtonUp.pressed(togglePneumaticState);
 
-    Controller1.ButtonDown.pressed([](){
+    Controller1.ButtonLeft.pressed([]{ pneumatic.close(); });
+    Controller1.ButtonRight.pressed([]{ pneumatic.open(); });
+
+    Controller1.ButtonDown.pressed([]{
         LOGGER.println("pneumatic value thing: %d", pneumatic.value());
     });
 
-    Arm_Motor.setVelocity(90, percent);
+    Top_Outake.setVelocity(90, percent);
     Drivetrain.setDriveVelocity(90, percent);
     Intake_motor.setVelocity(90, percent);
 }
